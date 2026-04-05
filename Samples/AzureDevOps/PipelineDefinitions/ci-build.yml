@@ -5,7 +5,6 @@ trigger:
   branches:
     include:
       - main
-      - hotfix
   paths:
     include:
       - Samples/AzureDevOps/Scripts/* # Modify path as required
@@ -80,8 +79,8 @@ stages:
           displayName: Pack Dataverse Solution
           inputs:
             SolutionType: Both
-            SolutionSourceFolder: $(Build.SourcesDirectory)/Samples/AzureDevOps/Solutions/EnvironmentRetention
-            SolutionOutputFile: $(Build.ArtifactStagingDirectory)/Build/Solutions/EnvironmentRetention.zip
+            SolutionSourceFolder: $(Build.SourcesDirectory)/Samples/AzureDevOps/Solutions/EnvironmentRetention # Modify path as required
+            SolutionOutputFile: $(Build.ArtifactStagingDirectory)/Build/Solutions/EnvironmentRetention.zip 
         - task: PublishBuildArtifacts@1
           name: publishBuildArtifacts
           displayName: Publish Solutions Build Artifact

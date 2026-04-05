@@ -39,6 +39,12 @@ steps:
     name: syncSolutionVersionForMain
     displayName: Sync Solution Version for Main
 
+  # Determine the updated solution version number using our custom script for Hotfix branch. Update paths as required in the following command
+  - pwsh: "$(Build.SourcesDirectory)/Samples/AzureDevOps/Scripts/SyncSolutionVersion.ps1 -serverURL '$(BuildTools.EnvironmentUrl)' -clientId '$(setConnectionVariablesSP.BuildTools.ApplicationId)' -clientSecret '$(setConnectionVariablesSP.BuildTools.ClientSecret)'  -solutionUniqueName '${{ parameters.SolutionName }}' -incrementBuild $false -incrementRevision $true -startingFilePath '$(Build.SourcesDirectory)/Samples/AzureDevOps/Scripts'"
+    condition: eq(variables['Build.SourceBranchName'], 'hotfix')
+    name: syncSolutionVersionForHotfix
+    displayName: Sync Solution Version for Hotfix  
+
   ## ---> WE NEED SOMETHING HERE. Put the Right Task Here  <---------#
 
   ## ---> WE NEED SOMETHING HERE. Put the Right Task Here  <---------#

@@ -6,20 +6,24 @@ parameters:
   - name: SolutionName
     displayName: "Solution Unique Name" #The solution to deploy
     type: string
-    
+
   - name: CommitMessage
     displayName: "Commit Message" #A helpful message every time you deploy to tell other developers what change
     type: string
 
 variables:
-  - group: Generic Variables # This Variable Group will need creating in your Azure DevOps Project under Pipelines > Library.
+  - group: Generic Variables # This Variable Group will need creating in your Azure DevOps Project under Pipelines > Library. 
   - group: 'DEV Environment Variables' # This Variable Group will need creating in your Azure DevOps Project under Pipelines > Library.
-
+  - group: 'HFXDEV Environment Variables' # This Variable Group will need creating in your Azure DevOps Project under Pipelines > Library. 
+  
 stages:
   - stage: exportUnpackAndCommitSolution
     displayName: 'Export, Unpack and Commit Solution'
     variables:
-    - group: 'DEV Environment Variables' # This Variable Group will need creating in your Azure DevOps Project under Pipelines > Library. 
+    - ${{ if eq(variables['Build.SourceBranchName'], 'main') }}:
+      - group: 'DEV Environment Variables' # This Variable Group will need creating in your Azure DevOps Project under Pipelines > Library. 
+    - ${{ if eq(variables['Build.SourceBranchName'], 'hotfix') }}:
+      - group: 'HFXDEV Environment Variables' # This Variable Group will need creating in your Azure DevOps Project under Pipelines > Library. 
     jobs:
     - job: exportUnpackAndCommitSolution
       pool:

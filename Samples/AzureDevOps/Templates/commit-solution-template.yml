@@ -31,13 +31,7 @@ steps:
       DefaultVersion: false
       AddToolsToPath: true
 
-  # Pick up the connection details from the Service Connection for later use
-  - task: PowerPlatformSetConnectionVariables@2
-    inputs:
-      authenticationType: 'PowerPlatformSPN'
-      PowerPlatformSPN: '$(SPNServiceConnection)' 
-    name: setConnectionVariablesSP
-    displayName: Set Connection Variables for SP
+  ## ---> WE NEED SOMETHING HERE. Put the Right Task Here  <---------#
 
   # Determine the updated solution version number using our custom script for Main branch. Update paths as required in the following command
   - pwsh: "$(Build.SourcesDirectory)/Samples/AzureDevOps/Scripts/SyncSolutionVersion.ps1 -serverURL '$(BuildTools.EnvironmentUrl)' -clientId '$(setConnectionVariablesSP.BuildTools.ApplicationId)' -clientSecret '$(setConnectionVariablesSP.BuildTools.ClientSecret)'  -solutionUniqueName '${{ parameters.SolutionName }}' -incrementBuild $true -incrementRevision $false -startingFilePath '$(Build.SourcesDirectory)/Samples/AzureDevOps/Scripts'"
@@ -45,31 +39,15 @@ steps:
     name: syncSolutionVersionForMain
     displayName: Sync Solution Version for Main
 
-   # Determine the updated solution version number using our custom script for Hotfix branch. Update paths as required in the following command
+  # Determine the updated solution version number using our custom script for Hotfix branch. Update paths as required in the following command
   - pwsh: "$(Build.SourcesDirectory)/Samples/AzureDevOps/Scripts/SyncSolutionVersion.ps1 -serverURL '$(BuildTools.EnvironmentUrl)' -clientId '$(setConnectionVariablesSP.BuildTools.ApplicationId)' -clientSecret '$(setConnectionVariablesSP.BuildTools.ClientSecret)'  -solutionUniqueName '${{ parameters.SolutionName }}' -incrementBuild $false -incrementRevision $true -startingFilePath '$(Build.SourcesDirectory)/Samples/AzureDevOps/Scripts'"
     condition: eq(variables['Build.SourceBranchName'], 'hotfix')
     name: syncSolutionVersionForHotfix
-    displayName: Sync Solution Version for Hotfix
+    displayName: Sync Solution Version for Hotfix  
 
-  # Update the solution version number in the environment as determined by the previous step
-  - task: PowerPlatformSetSolutionVersion@2
-    name: setSolutionVersion
-    displayName: Set Solution Version
-    inputs:
-      authenticationType: 'PowerPlatformSPN'
-      PowerPlatformSPN: '$(SPNServiceConnection)'
-      SolutionName: '${{ parameters.SolutionName }}'
-      SolutionVersionNumber: '$(newSolutionVersion)'
+  ## ---> WE NEED SOMETHING HERE. Put the Right Task Here  <---------#
 
-  # Publish all customisations in the source environment to ensure everything is up to date before exporting    
-  - task: PowerPlatformPublishCustomizations@2
-    name: publishAllCustomisations
-    displayName: Publish All Customisations
-    inputs:
-      authenticationType: 'PowerPlatformSPN'
-      PowerPlatformSPN: '$(SPNServiceConnection)'
-      AsyncOperation: true
-      MaxAsyncWaitTime: '60'
+  ## ---> WE NEED SOMETHING HERE. Put the Right Task Here  <---------#
 
   # Export the unmanaged solution first    
   - task: PowerPlatformExportSolution@2

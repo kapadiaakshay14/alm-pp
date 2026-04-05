@@ -5,6 +5,7 @@ trigger:
   branches:
     include:
       - main
+      - hotfix
   paths:
     include:
       - Samples/AzureDevOps/Scripts/* # Modify path as required

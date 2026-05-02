@@ -47,8 +47,35 @@ steps:
 
   ## ---> WE NEED SOMETHING HERE. Put the Right Task Here  <---------#
 
-  ## ---> WE NEED SOMETHING HERE. Put the Right Task Here  <---------#
+    # Pick up the connection details from the Service Connection for later use
+  - task: PowerPlatformSetConnectionVariables@2
+    inputs:
+      authenticationType: 'PowerPlatformSPN'
+      PowerPlatformSPN: '$(SPNServiceConnection)' 
+    name: setConnectionVariablesSP
+    displayName: Set Connection Variables for SP
 
+    # Update the solution version number as determined by the previous step
+  - task: PowerPlatformSetSolutionVersion@2
+    name: setSolutionVersion
+    displayName: Set Solution Version
+    inputs:
+      authenticationType: 'PowerPlatformSPN'
+      PowerPlatformSPN: '$(SPNServiceConnection)'
+      SolutionName: '${{ parameters.SolutionName }}'
+      SolutionVersionNumber: '$(newSolutionVersion)'
+
+  ## ---> WE NEED SOMETHING HERE. Put the Right Task Here  <---------#
+  # Publish all customisations in the source environment to ensure everything is up to date before exporting    
+  - task: PowerPlatformPublishCustomizations@2
+    name: publishAllCustomisations
+    displayName: Publish All Customisations
+    inputs:
+      authenticationType: 'PowerPlatformSPN'
+      PowerPlatformSPN: '$(SPNServiceConnection)'
+      AsyncOperation: true
+      MaxAsyncWaitTime: '60'
+      
   # Export the unmanaged solution first    
   - task: PowerPlatformExportSolution@2
     name: exportUnmanagedSolution

@@ -67,6 +67,12 @@ $columns = "solutionid", "uniquename", "friendlyname", "version"
 $solution = Get-DataverseRecord -Connection $connection -TableName "solution" -FilterValues @{uniquename="$solutionUniqueName"} -Columns $columns
 
 $solutionRecord = $solution
+
+if ($null -eq $solutionRecord -or $null -eq $solutionRecord.version) {
+    Write-Error "Solution '$solutionUniqueName' not found or has no version. Exiting."
+    exit 1
+}
+
 $currentVersion = $solutionRecord.version
 
 Write-Host "Current Version: " $currentVersion

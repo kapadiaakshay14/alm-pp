@@ -33,5 +33,6 @@ stages:
       - template: ../Templates/commit-solution-template.yml
         parameters:
               SolutionName: ${{ parameters.SolutionName }}
+              CommitMessage:${{ parameters.CommitMessage }}
               ##--> WE NEED SOMETHING HERE! The next developer won't know what changes you made during the deployment"
           

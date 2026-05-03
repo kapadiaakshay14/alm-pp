@@ -70,6 +70,7 @@ else{
     throw "Invalid combination of credentials specified. Ensure clientId/clientSecret or username/password are set and non-empty."
 }
 
+Write-Host "Connection " $connection
 Write-Host "Successfully connected to Dataverse"
 Write-Host "Retrieving current version of" $solutionUniqueName "solution"
 

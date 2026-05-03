@@ -57,17 +57,17 @@ Write-Host "using ClientId =" $clientId
 
 # Establish a connection to Dataverse using either username/password or clientId/clientSecret
 $connection = $null
-if ($null -ne $username -and $null -ne $password){
+if (-not [string]::IsNullOrEmpty($username) -and -not [string]::IsNullOrEmpty($password)){
     Write-Host "Connecting to Dataverse environment at" $serverURL "using Username" $username
     $connection = Get-DataverseConnection -Url $serverURL -Username $username -Password $password
 }
-elseif ($null -ne $clientId -and $null -ne $clientSecret){
+elseif (-not [string]::IsNullOrEmpty($clientId) -and -not [string]::IsNullOrEmpty($clientSecret)){
     Write-Host "Connecting to Dataverse environment at" $serverURL "using ClientId" $clientId
     $connection = Get-DataverseConnection -Url $serverURL -ClientId $clientId -ClientSecret $clientSecret
 }
 else{
     # We need at least one supported credential type to connect
-    throw "Invalid combination of credentials specified"
+    throw "Invalid combination of credentials specified. Ensure clientId/clientSecret or username/password are set and non-empty."
 }
 
 Write-Host "Successfully connected to Dataverse"

@@ -28,7 +28,7 @@ steps:
     name: installDotNet
     displayName: Install .NET Runtime
     inputs:
-      packageType: 'runtime'
+      packageType: 'sdk'
       version: '10.x'
 
   # Install the Power Platform Tools on the agent

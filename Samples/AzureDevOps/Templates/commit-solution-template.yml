@@ -31,7 +31,12 @@ steps:
       DefaultVersion: false
       AddToolsToPath: true
 
-  ## ---> WE NEED SOMETHING HERE. Put the Right Task Here  <---------#
+  # Install PowerShell Core so the pwsh steps below can run on the agent
+  - task: CmdLine@2
+    name: installPowerShellCore
+    displayName: Install PowerShell Core
+    inputs:
+      script: winget install --id Microsoft.PowerShell --source winget --silent --accept-source-agreements --accept-package-agreements
 
   # Determine the updated solution version number using our custom script for Main branch. Update paths as required in the following command
   - pwsh: "$(Build.SourcesDirectory)/Samples/AzureDevOps/Scripts/SyncSolutionVersion.ps1 -serverURL '$(BuildTools.EnvironmentUrl)' -clientId '$(setConnectionVariablesSP.BuildTools.ApplicationId)' -clientSecret '$(setConnectionVariablesSP.BuildTools.ClientSecret)'  -solutionUniqueName '${{ parameters.SolutionName }}' -incrementBuild $true -incrementRevision $false -startingFilePath '$(Build.SourcesDirectory)/Samples/AzureDevOps/Scripts'"

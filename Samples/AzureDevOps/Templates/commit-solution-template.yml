@@ -23,6 +23,14 @@ steps:
         git -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" fetch
         git -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" checkout -B $(Build.SourceBranchName)   
 
+  # Install .NET runtime required by the Power Platform CLI (pac) on Ubuntu agents
+  - task: UseDotNet@2
+    name: installDotNet
+    displayName: Install .NET Runtime
+    inputs:
+      packageType: 'runtime'
+      version: '8.x'
+
   # Install the Power Platform Tools on the agent
   - task: PowerPlatformToolInstaller@2
     name: installPowerPlatformTools

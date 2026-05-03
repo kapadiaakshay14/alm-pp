@@ -43,6 +43,15 @@ steps:
         sudo apt-get update
         sudo apt-get install -y powershell
 
+    # Pick up the connection details from the Service Connection for later use
+    # Must run before the pwsh sync steps so its output variables are available
+  - task: PowerPlatformSetConnectionVariables@2
+    inputs:
+      authenticationType: 'PowerPlatformSPN'
+      PowerPlatformSPN: '$(SPNServiceConnection)'
+    name: setConnectionVariablesSP
+    displayName: Set Connection Variables for SP
+
   # Determine the updated solution version number using our custom script for Main branch. Update paths as required in the following command
   - pwsh: "$(Build.SourcesDirectory)/Samples/AzureDevOps/Scripts/SyncSolutionVersion.ps1 -serverURL '$(BuildTools.EnvironmentUrl)' -clientId '$(setConnectionVariablesSP.BuildTools.ApplicationId)' -clientSecret '$(setConnectionVariablesSP.BuildTools.ClientSecret)'  -solutionUniqueName '${{ parameters.SolutionName }}' -incrementBuild $true -incrementRevision $false -startingFilePath '$(Build.SourcesDirectory)/Samples/AzureDevOps/Scripts'"
     condition: eq(variables['Build.SourceBranchName'], 'main')
@@ -53,17 +62,9 @@ steps:
   - pwsh: "$(Build.SourcesDirectory)/Samples/AzureDevOps/Scripts/SyncSolutionVersion.ps1 -serverURL '$(BuildTools.EnvironmentUrl)' -clientId '$(setConnectionVariablesSP.BuildTools.ApplicationId)' -clientSecret '$(setConnectionVariablesSP.BuildTools.ClientSecret)'  -solutionUniqueName '${{ parameters.SolutionName }}' -incrementBuild $false -incrementRevision $true -startingFilePath '$(Build.SourcesDirectory)/Samples/AzureDevOps/Scripts'"
     condition: eq(variables['Build.SourceBranchName'], 'hotfix')
     name: syncSolutionVersionForHotfix
-    displayName: Sync Solution Version for Hotfix  
+    displayName: Sync Solution Version for Hotfix
 
   ## ---> WE NEED SOMETHING HERE. Put the Right Task Here  <---------#
-
-    # Pick up the connection details from the Service Connection for later use
-  - task: PowerPlatformSetConnectionVariables@2
-    inputs:
-      authenticationType: 'PowerPlatformSPN'
-      PowerPlatformSPN: '$(SPNServiceConnection)' 
-    name: setConnectionVariablesSP
-    displayName: Set Connection Variables for SP
 
     # Update the solution version number as determined by the previous step
   - task: PowerPlatformSetSolutionVersion@2

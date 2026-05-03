@@ -32,11 +32,16 @@ steps:
       AddToolsToPath: true
 
   # Install PowerShell Core so the pwsh steps below can run on the agent
-  - task: CmdLine@2
+  - task: Bash@3
     name: installPowerShellCore
     displayName: Install PowerShell Core
     inputs:
-      script: winget install --id Microsoft.PowerShell --source winget --silent --accept-source-agreements --accept-package-agreements
+      targetType: 'inline'
+      script: |
+        wget -q https://packages.microsoft.com/config/ubuntu/$(lsb_release -rs)/packages-microsoft-prod.deb
+        sudo dpkg -i packages-microsoft-prod.deb
+        sudo apt-get update
+        sudo apt-get install -y powershell
 
   # Determine the updated solution version number using our custom script for Main branch. Update paths as required in the following command
   - pwsh: "$(Build.SourcesDirectory)/Samples/AzureDevOps/Scripts/SyncSolutionVersion.ps1 -serverURL '$(BuildTools.EnvironmentUrl)' -clientId '$(setConnectionVariablesSP.BuildTools.ApplicationId)' -clientSecret '$(setConnectionVariablesSP.BuildTools.ClientSecret)'  -solutionUniqueName '${{ parameters.SolutionName }}' -incrementBuild $true -incrementRevision $false -startingFilePath '$(Build.SourcesDirectory)/Samples/AzureDevOps/Scripts'"

@@ -9,6 +9,8 @@ param(
 )
 $ErrorActionPreference = 'Stop'
 
+Write-Host "Settings file path:" $settingsFilePath
+
 # Load Deployment Settings file
 $deploymentSettingsContent = Get-Content -Path $settingsFilePath -Raw | ConvertFrom-Json
 $environmentVariablesTokens = $environmentVariablesTokens | ConvertFrom-Json

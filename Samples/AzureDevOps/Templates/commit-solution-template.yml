@@ -29,7 +29,7 @@ steps:
     displayName: Install .NET Runtime
     inputs:
       packageType: 'runtime'
-      version: '8.x'
+      version: '10.x'
 
   # Install the Power Platform Tools on the agent
   - task: PowerPlatformToolInstaller@2

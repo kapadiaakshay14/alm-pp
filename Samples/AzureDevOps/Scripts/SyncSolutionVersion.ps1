@@ -42,7 +42,16 @@ catch {
 
 # Make sure the Dataverse PowerShell module we rely on is installed and loaded
 Install-Module Rnwood.Dataverse.Data.PowerShell -Scope CurrentUser -Force -AllowClobber -RequiredVersion 1.1.3 -Verbose -Repository "PSGallery"
+
+if (-not (Get-Module -ListAvailable -Name Rnwood.Dataverse.Data.PowerShell)) {
+    throw "Module 'Rnwood.Dataverse.Data.PowerShell' failed to install. Check PSGallery connectivity and permissions."
+}
+
 Import-Module -Name Rnwood.Dataverse.Data.PowerShell -Verbose
+
+if (-not (Get-Module -Name Rnwood.Dataverse.Data.PowerShell)) {
+    throw "Module 'Rnwood.Dataverse.Data.PowerShell' failed to import into the current session."
+}
 
 Write-Host "using ClientId =" $clientId
 

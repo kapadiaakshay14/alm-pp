@@ -44,6 +44,8 @@ catch {
 Install-Module Rnwood.Dataverse.Data.PowerShell -Scope CurrentUser -Force -AllowClobber -RequiredVersion 1.1.3 -Verbose -Repository "PSGallery"
 Import-Module -Name Rnwood.Dataverse.Data.PowerShell -Verbose
 
+Write-Host "using ClientId =" $clientId
+
 # Establish a connection to Dataverse using either username/password or clientId/clientSecret
 $connection = $null
 if ($null -ne $username -and $null -ne $password){

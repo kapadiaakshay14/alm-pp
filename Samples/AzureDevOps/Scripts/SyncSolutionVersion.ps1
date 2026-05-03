@@ -80,6 +80,8 @@ $solution = Get-DataverseRecord -Connection $connection -TableName "solution" -F
 
 $solutionRecord = $solution
 
+Write-Host "Solution:  " $solutionRecord
+
 if ($null -eq $solutionRecord -or $null -eq $solutionRecord.version) {
     Write-Error "Solution '$solutionUniqueName' not found or has no version. Exiting."
     exit 1
